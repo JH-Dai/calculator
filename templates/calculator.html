@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            width: 200px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        input[type="button"] {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="expression" readonly><br>
+        <input type="button" value="1" onclick="addToExpression('1')">
+        <input type="button" value="2" onclick="addToExpression('2')">
+        <input type="button" value="3" onclick="addToExpression('3')">
+        <input type="button" value="+" onclick="addToExpression('+')"><br>
+        <input type="button" value="4" onclick="addToExpression('4')">
+        <input type="button" value="5" onclick="addToExpression('5')">
+        <input type="button" value="6" onclick="addToExpression('6')">
+        <input type="button" value="-" onclick="addToExpression('-')"><br>
+        <input type="button" value="7" onclick="addToExpression('7')">
+        <input type="button" value="8" onclick="addToExpression('8')">
+        <input type="button" value="9" onclick="addToExpression('9')">
+        <input type="button" value="*" onclick="addToExpression('*')"><br>
+        <input type="button" value="C" onclick="clearExpression()">
+        <input type="button" value="0" onclick="addToExpression('0')">
+        <input type="button" value="=" onclick="calculate()">
+        <input type="button" value="/" onclick="addToExpression('/')">
+    </div>
+
+    <script>
+        function addToExpression(value) {
+            document.getElementById('expression').value += value;
+        }
+
+        function clearExpression() {
+            document.getElementById('expression').value = '';
+        }
+
+        function calculate() {
+            var expression = document.getElementById('expression').value;
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'expression=' + encodeURIComponent(expression)
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('expression').value = data;
+            });
+        }
+    </script>
+</body>
+</html>
